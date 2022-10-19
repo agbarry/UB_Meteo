@@ -11,7 +11,7 @@ async function search() {
     }
 
     const data = await response.json();
-    console.log(data);
+    // console.log(data);
     return data;
   } catch (error) {
     console.error(`Could not get data: ${error}`);
@@ -80,15 +80,17 @@ async function display() {
   createElement('data', 'div', 'data_content', null);
 
   for (const d in data) {
-    console.log(d);
+    // console.log(d);
     if (d !== 'city_info' && d !== 'forecast_info' && d !== 'current_condition') {
       let infos = data[d]; /* Recupération de toutes les infos de la météo */
 
       /* Création d'un élément div qui contiendra un titre ainsi qu'une liste des éléments */
       let div = createElement('data_content', 'div', d, null);
+      
       div.addEventListener('mouseover', function () {
         this.style.backgroundColor = 'white';
       });
+
       div.addEventListener(
         'mouseout',
         d !== 'fcst_day_0'
@@ -109,33 +111,38 @@ async function display() {
       for (const info in infos) {
         let element = infos[info];
 
-        if (
-          info !== 'name' &&
-          info !== 'sunrise' &&
-          info !== 'sunset' &&
-          info !== 'country' &&
-          element !== null &&
-          info !== 'day_short' &&
-          info !== 'condition_key'
-        ) {
+        if ( info !== 'name' && info !== 'sunrise' && info !== 'sunset' &&
+          info !== 'country' && element !== null && info !== 'day_short' && info !== 'condition_key' ) {
           if (info != 'hourly_data') {
             if (info !== 'icon' && info !== 'icon_big') {
               if (info === 'day_long') {
                 h3.innerHTML = element;
-              } else {
+              } 
+              else {
                 let content = element;
                 content += info === 'tmin' ? '&deg' : info === 'tmax' ? '&deg  /' : '';
                 createElement(d, 'li', info, content);
               }
-            } else if (info === 'icon') {
+            } 
+            else if (info === 'icon') {
               let img = createElement(d, 'img', info, null);
               img.src = element;
             }
-          } else {
+          } 
+          else {
             createElement('data', 'ul', d + '_' + info, null);
 
             for (const hourly_data in element) {
-              createElement(d + '_' + info, 'li', '', hourly_data + ' : ' + element[hourly_data]);
+              createElement(d + '_' + info, 'li', '', hourly_data);
+
+              for (const hourly_data_info in element[hourly_data]) {
+                if( hourly_data_info !== 'ICON' ) 
+                  createElement(d + '_' + info, 'li', '', hourly_data_info + ' : ' + element[hourly_data][hourly_data_info]);
+                else {
+                  let img = createElement(d + '_' + info, 'img', hourly_data_info, null);
+                  img.src = element[hourly_data][hourly_data_info];
+                }
+              }
             }
           }
         }

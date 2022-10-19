@@ -18,12 +18,11 @@ body > div {
 
 #menu {
   background-color: #5e6c81;
-  padding: 0.5rem;
+  padding: 5px;
   padding-left: 1rem;
   padding-right: 1rem;
   margin: 1rem auto;
   display: flex;
-  gap: 2rem;
   flex-direction: row;
   justify-content: space-between;
   border-radius: 2px;
@@ -61,6 +60,7 @@ input,
 /* Mise en forme du message d'erreur en cas d'absence de donnée */
 #error {
   color: red;
+  font-size: 1rem;
 }
 
 /* Mise en page du sous-titre : (lever du soleil, heure et jour, coucher du soleil */
