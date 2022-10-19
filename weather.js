@@ -146,7 +146,7 @@ async function display() {
 
 /* Gestion du click */
 function onClick() {
-  const button = document.querySelector('#search');
+  const button = document.querySelector('#bouton');
   button.addEventListener('click', display);
 }
 
