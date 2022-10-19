@@ -1,0 +1,179 @@
+body {
+  margin: 0 auto;
+  width: 80%;
+  background-color: #c0cfe4;
+  color: black;
+}
+
+* {
+  list-style-type: none;
+}
+
+body > div {
+  display: flex;
+  flex-flow: column nowrap;
+  justify-content: center;
+  align-items: center;
+}
+
+#menu {
+  background-color: #5e6c81;
+  padding: 0.5rem;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  margin: 1rem auto;
+  display: flex;
+  gap: 2rem;
+  flex-direction: row;
+  justify-content: space-between;
+  border-radius: 2px;
+}
+
+#logo {
+  color: #ffffff;
+  font-weight: bold;
+  font-size: x-large;
+}
+
+#search {
+  display: flex;
+  gap: 2rem;
+  flex-flow: row nowrap;
+}
+
+input,
+#bouton {
+  padding: 0.5rem;
+  font-size: 1rem;
+  border-radius: 5px;
+}
+
+#bouton {
+  background-color: #c0cfe4;
+}
+
+#data {
+  display: flex;
+  gap: 1rem;
+  flex-flow: column nowrap;
+}
+
+/* Mise en forme du message d'erreur en cas d'absence de donnée */
+#error {
+  color: red;
+}
+
+/* Mise en page du sous-titre : (lever du soleil, heure et jour, coucher du soleil */
+#data_subtitle {
+  width: 720px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+#data_subtitle_head {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+#data_subtitle_content {
+  height: 180px;
+  background-color: white;
+  border-radius: 5px;
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: space-between;
+  text-align: center;
+}
+
+#data_subtitle_content2 {
+  display: flex;
+  gap: 2rem;
+  flex-flow: row nowrap;
+  justify-content: space-between;
+  align-items: center;
+}
+
+#condition {
+  max-width: 90%;
+  margin-top: 0;
+  font-size: 1rem;
+}
+
+#tmp {
+  margin: 0;
+  font-size: 8rem;
+}
+
+#water {
+  z-index: 0;
+  margin-left: 18rem;
+  position: absolute;
+  padding: 3rem;
+  background-color: #b3c1d6;
+  border-radius: 0 50% 50% 50%;
+  transform: rotate(45deg);
+}
+
+#himidity {
+  margin-left: 1.5rem;
+  margin-top: 1rem;
+  z-index: 10;
+}
+
+#pressure {
+  padding: 1rem;
+  margin-top: -6rem;
+  font-size: 0.8rem;
+}
+/* Fin */
+
+/* Mise en page de l'affichage des données selon le jour */
+#data_content {
+  display: flex;
+  gap: 1rem;
+  flex-flow: row nowrap;
+  justify-content: space-between;
+  align-items: center;
+}
+
+#fcst_day_0,
+#fcst_day_1,
+#fcst_day_2,
+#fcst_day_3,
+#fcst_day_4 {
+  width: 160px;
+  height: 230px;
+  border: 1px solid #5e6c81;
+  display: flex;
+  flex-flow: column nowrap;
+  gap: 1rem;
+  text-align: center;
+}
+
+#fcst_day_0 {
+  background-color: white;
+}
+
+#tmax {
+  text-align: left;
+  margin-left: 30%;
+}
+
+#tmin {
+  position: absolute;
+  margin-left: 6rem;
+  margin-top: 5.6rem;
+}
+
+#day_long {
+  line-height: 1px;
+}
+
+#icon {
+  width: 50px;
+  height: 50px;
+  margin-left: 3rem;
+}
+/* Fin */
