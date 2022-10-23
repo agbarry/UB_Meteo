@@ -1,3 +1,19 @@
+/* Pour recupérer la date courante ainsi les cinq prochaines heures à partir de l'heure courante */
+function getDate() {
+  let date = new Date();
+  let current_date = date.getDate() + "-" + date.getMonth() + "-" +  date.getFullYear() ;
+  let current_time = date.getHours();
+
+  let current_times = [current_time + 'H00'];
+  if (current_time === 23 )
+    current_time = -1;
+
+  for (let i = 1; i < 5; i++) 
+    current_times.push(current_time + i + 'H00');
+
+  return [current_date, current_times]; 
+}
+
 /* Recherche des données */
 async function search() {
   const input = document.querySelector('input');
@@ -72,7 +88,7 @@ async function display() {
   createElement('data_subtitle_content2', 'div', 'water', null);
   createElement('data_subtitle_content2', 'div', 'himidity', null);
   createElement('himidity', 'p', 'himidity_title', 'Humidité');
-  createElement('himidity', 'p', 'himidity_content', data['current_condition']['humidity'] + ' %');
+  createElement('himidity', 'p', 'himidity_content', data['current_condition']['humidity'] + '%');
   createElement('data_subtitle_content2', 'div', 'pressure', null);
   createElement('pressure', 'p', 'pressure_title', 'Pression');
   createElement('pressure', 'p', 'pressure_content', data['current_condition']['pressure'] + ' hPa');
@@ -95,7 +111,7 @@ async function display() {
         'mouseout',
         d !== 'fcst_day_0'
           ? function () {
-              this.style.backgroundColor = '#c0cfe4';
+              this.style.backgroundColor = '#6c91c5';
             }
           : function () {
               this.style.backgroundColor = 'white';
@@ -105,8 +121,6 @@ async function display() {
       /* Création d'un élément h3 qui sera le titre des éléments : à enlever probablement */
       let h3 = createElement(d, 'h3', 'day_long', null);
 
-      // createElement(d, 'ul', d + '_content', null);
-
       /* Affichage des infos */
       for (const info in infos) {
         let element = infos[info];
@@ -115,9 +129,8 @@ async function display() {
           info !== 'country' && element !== null && info !== 'day_short' && info !== 'condition_key' ) {
           if (info != 'hourly_data') {
             if (info !== 'icon' && info !== 'icon_big') {
-              if (info === 'day_long') {
-                h3.innerHTML = element;
-              } 
+              if (info === 'day_long')
+                h3.innerHTML = element; 
               else {
                 let content = element;
                 content += info === 'tmin' ? '&deg' : info === 'tmax' ? '&deg  /' : '';
@@ -130,19 +143,36 @@ async function display() {
             }
           } 
           else {
-            createElement('data', 'ul', d + '_' + info, null);
+            const current_date = getDate();
+            createElement('data', 'h3', d + '_' + info + '_title', 'Détail par heure de la météo du : ' + current_date[0]);
 
+            createElement('data', 'div', d + '_' + info, null);
+            // console.log(element);
+
+            /* Pour l'affichage du détail par heure */
             for (const hourly_data in element) {
-              createElement(d + '_' + info, 'li', '', hourly_data);
+              /* Affichage des données des cinq prochaines heures à partir de l'heure courante */
+              // if(current_date[1].includes(hourly_data)) {
+                console.log(hourly_data);
 
-              for (const hourly_data_info in element[hourly_data]) {
-                if( hourly_data_info !== 'ICON' ) 
-                  createElement(d + '_' + info, 'li', '', hourly_data_info + ' : ' + element[hourly_data][hourly_data_info]);
-                else {
-                  let img = createElement(d + '_' + info, 'img', hourly_data_info, null);
-                  img.src = element[hourly_data][hourly_data_info];
+                createElement(d + '_' + info, 'ul', d + '_' + info + hourly_data, null);
+
+                createElement(d + '_' + info + hourly_data, 'li', 'hour'+'_data', hourly_data); /* Affichage de l'heure */
+
+
+                /* Affichage des autres infos */
+                for (const hourly_data_info in element[hourly_data]) {
+                  if( hourly_data_info === 'ICON' || hourly_data_info === 'CONDITION' || hourly_data_info === 'TMP2m' || hourly_data_info === 'HUMIDEX' ) {
+                    // console.log(hourly_data_info);
+                    if( hourly_data_info !== 'ICON' ) 
+                      createElement(d + '_' + info + hourly_data, 'li', hourly_data_info, element[hourly_data][hourly_data_info]);
+                    else if (hourly_data_info === 'ICON') {
+                      let img = createElement(d + '_' + info + hourly_data, 'img', hourly_data_info, null);
+                      img.src = element[hourly_data][hourly_data_info];
+                    }
+                  }
                 }
-              }
+              // }
             }
           }
         }

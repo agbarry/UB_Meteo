@@ -1,7 +1,7 @@
 body {
   margin: 0 auto;
   width: 80%;
-  background-color: #c0cfe4;
+  background-color: #6c91c5;
   color: black;
 }
 
@@ -17,7 +17,7 @@ body > div {
 }
 
 #menu {
-  background-color: #5e6c81;
+  background-color: #1a345a;
   padding: 5px;
   padding-left: 1rem;
   padding-right: 1rem;
@@ -48,7 +48,12 @@ input,
 }
 
 #bouton {
-  background-color: #c0cfe4;
+  background-color: #6c91c5;
+}
+
+#map {
+  height: 180px;
+  width: 260px;
 }
 
 #data {
@@ -111,7 +116,7 @@ input,
   margin-left: 18rem;
   position: absolute;
   padding: 3rem;
-  background-color: #b3c1d6;
+  background-color: #6c91c5;
   border-radius: 0 50% 50% 50%;
   transform: rotate(45deg);
 }
@@ -145,7 +150,8 @@ input,
 #fcst_day_4 {
   width: 160px;
   height: 230px;
-  border: 1px solid #5e6c81;
+  border: 1px solid #1a345a;
+  border-radius: 2rem;
   display: flex;
   flex-flow: column nowrap;
   gap: 1rem;
@@ -176,4 +182,82 @@ input,
   height: 50px;
   margin-left: 3rem;
 }
+
+/* Mise en forme de l'affichage des détails par heure selon le jour */
+#fcst_day_1_hourly_data, #fcst_day_1_hourly_data_title,
+#fcst_day_2_hourly_data, #fcst_day_2_hourly_data_title,
+#fcst_day_3_hourly_data, #fcst_day_3_hourly_data_title,
+#fcst_day_4_hourly_data, #fcst_day_4_hourly_data_title {
+  display: none;
+}
+
+#fcst_day_0_hourly_data, #fcst_day_1_hourly_data,
+#fcst_day_2_hourly_data, #fcst_day_3_hourly_data, 
+#fcst_day_4_hourly_data {
+  display: none;
+  justify-content: center;
+  border-top: thick double #1a345a;
+  border-bottom: thick double #1a345a;
+  border-radius: 1rem;
+  padding: 1rem;
+  margin-bottom: 1rem;
+}
+
+#fcst_day_0_hourly_data {
+  display: flex;
+  flex-flow: row wrap;
+  gap: 1rem;
+}
+
+#fcst_day_0_hourly_data0H00, #fcst_day_0_hourly_data1H00,
+#fcst_day_0_hourly_data2H00, #fcst_day_0_hourly_data3H00,
+#fcst_day_0_hourly_data4H00, #fcst_day_0_hourly_data5H00,
+#fcst_day_0_hourly_data6H00, #fcst_day_0_hourly_data7H00,
+#fcst_day_0_hourly_data8H00, #fcst_day_0_hourly_data9H00,
+#fcst_day_0_hourly_data10H00, #fcst_day_0_hourly_data11H00,
+#fcst_day_0_hourly_data12H00, #fcst_day_0_hourly_data13H00,
+#fcst_day_0_hourly_data14H00, #fcst_day_0_hourly_data15H00,
+#fcst_day_0_hourly_data16H00, #fcst_day_0_hourly_data17H00,
+#fcst_day_0_hourly_data18H00, #fcst_day_0_hourly_data19H00,
+#fcst_day_0_hourly_data20H00, #fcst_day_0_hourly_data21H00,
+#fcst_day_0_hourly_data22H00, #fcst_day_0_hourly_data23H00 {
+  display: grid;
+  grid-template-columns: 10% 65% 20%;
+  grid-template-areas: 'image hourly degree';
+  text-align: left;
+  border: 1px solid #1a345a;
+  width: 220px;
+  height: 80px;
+}
+
+#ICON {
+  grid-area: image;
+  margin-left: -2rem;
+  margin-top: 1rem;
+}
+
+#hour_data, #CONDITION {
+  grid-area: hourly;
+  text-align: center;
+}
+
+#hour_data {
+  font-size: 1.5rem;
+}
+
+#CONDITION {
+  padding-top: 3rem;
+  font-size: small;
+}
+
+
+#TMP2m, #HUMIDEX {
+  grid-area: degree;
+}
+
+#HUMIDEX {
+  padding-top: 3rem;
+}
+/* Fin */
+
 /* Fin */
