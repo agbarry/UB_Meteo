@@ -1,10 +1,8 @@
-import { headElements } from './Data.js';
+import { headElements } from './utils/data/Data.js';
 
 /* Pour recupérer la date courante ainsi les cinq prochaines heures à partir de l'heure courante */
 function getDate() {
   let date = new Date();
-  let current_date =
-    date.getDate() + "-" + date.getMonth() + "-" + date.getFullYear();
   let current_time = date.getHours();
 
   let current_times = [current_time + "H00"];
@@ -12,7 +10,7 @@ function getDate() {
 
   for (let i = 1; i < 5; i++) current_times.push(current_time + i + "H00");
 
-  return [current_date, current_times];
+  return current_times;
 }
 
 /* Recherche des données */
@@ -73,20 +71,29 @@ function hourlyDisplay(element, info, parent) {
     // if(current_date[1].includes(hourly_data)) {
 
     const ul = createElement(parent + "_" + info, "ul", parent + "_" + info + hourly_data,null);
-    ul.style.backgroundColor = ( hourly_data === (new Date()).getHours()+'H00' ? 'white' : 'inherit');
+    ul.style.backgroundColor = ( hourly_data === ((new Date()).getHours()) + 1 +'H00' ? 'white' : 'inherit');
 
     createElement(parent + "_" + info + hourly_data, "li", "hour" + "_data", hourly_data); /* Affichage de l'heure */
 
     /* Affichage des autres infos */
     for (const hourly_data_info in element[hourly_data]) {
       if (hourly_data_info === "ICON" || hourly_data_info === "CONDITION" ||
-        hourly_data_info === "TMP2m" || hourly_data_info === "HUMIDEX"
-      ) {
-        if (hourly_data_info !== "ICON")
-          createElement(parent + "_" + info + hourly_data,"li",hourly_data_info,
-            element[hourly_data][hourly_data_info]);
-        else if (hourly_data_info === "ICON") {
-          let img = createElement(parent + "_" + info + hourly_data,"img",hourly_data_info,null);
+        hourly_data_info === "TMP2m" || hourly_data_info === "RH2m") 
+      {
+        if (hourly_data_info !== "ICON") {
+          let li = createElement(parent + "_" + info + hourly_data, "li", hourly_data_info, element[hourly_data][hourly_data_info]);
+          if(hourly_data_info === "RH2m") {
+            li.id = parent+'_'+hourly_data_info+'_'+hourly_data;
+            let icon = createElement(parent+'_'+hourly_data_info+'_'+hourly_data, "img", 'img_'+hourly_data_info, null);
+            icon.src = 'images/humidite.png';
+          }
+          else if(hourly_data_info === "TMP2m") {
+            li.id = parent+'_'+hourly_data_info+'_'+hourly_data;
+            let icon = createElement(parent+'_'+hourly_data_info+'_'+hourly_data, "img", 'img_'+hourly_data_info, null);
+            icon.src = 'images/celsius.png';
+          }
+        } else if (hourly_data_info === "ICON") {
+          let img = createElement(parent + "_" + info + hourly_data,"img",hourly_data_info, null);
           img.src = element[hourly_data][hourly_data_info];
         }
       }
@@ -223,19 +230,19 @@ async function dataDisplay() {
 }
 
 
-/* function mapper(){
-  map = L.map('map').setView([51.505, -0.09], 13);
-  L.tileLayer('https://tile.openstreetmap.org/%7Bz%7D/%7Bx%7D/%7By%7D.png', {
-      maxZoom: 5,
-      attribution: '&copy; <a href="http://www.openstreetmap.org/copyright%22%3EOpenStreetMap</a>'
+function mapper() {
+  const infos = {
+    lat: 51.505,
+    lng: -0.09,
+    zoomLevel: 13
+  }
+  
+  const map = L.map('map').setView([infos.lat, infos.lng], infos.zoomLevel);
+  L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    maxZoom: 19,
+    attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
   }).addTo(map);
-  // map.on('click', function (e) {
-  //     coord = e.latlng;
-  //     lat = coord.lat;
-  //     lng = coord.lng;
-  //     changeCityWithCoords();
-  // });
-} */
+}
 
 
 /* Gestion du click */
@@ -245,7 +252,7 @@ function onClick() {
     dataDisplay();
   });
 
-  // mapper();
+  mapper();
 }
 
 onClick(); /* Lancement de la recherche */

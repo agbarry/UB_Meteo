@@ -1,8 +1,17 @@
+:root {
+  --main-color: #6c91c5;
+  --sec-color: #1a345a;
+  --white-color: #ffffff;
+  --black-color: #000000;
+  --err-color: #fa0202;
+  --bor-color: #344866;
+}
+
 body {
   margin: 0 auto;
   width: 80%;
-  background-color: #6c91c5;
-  color: black;
+  background-color: var(--main-color);
+  color: var(--black-color);
 }
 
 * {
@@ -17,7 +26,7 @@ body > div {
 }
 
 #menu {
-  background-color: #1a345a;
+  background-color: var(--sec-color);
   padding: 5px;
   padding-left: 1rem;
   padding-right: 1rem;
@@ -25,11 +34,11 @@ body > div {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  border-radius: 2px;
+  border-radius: 5px;
 }
 
 #logo {
-  color: #ffffff;
+  color: var(--white-color);
   font-weight: bold;
   font-size: x-large;
 }
@@ -48,13 +57,12 @@ input,
 }
 
 #bouton {
-  background-color: #6c91c5;
+  background-color: var(--main-color);
 }
 
 /* Mise en forme de la carte */
 #map {
-  height: 180px;
-  width: 260px;
+  height: 260px;
 }
 /* FIn */
 
@@ -62,11 +70,12 @@ input,
   display: flex;
   gap: 1rem;
   flex-flow: column nowrap;
+  margin-bottom: 5rem;
 }
 
 /* Mise en forme du message d'erreur en cas d'absence de donnée */
 #error {
-  color: red;
+  color: var(--err-color);
   font-size: 1rem;
 }
 
@@ -86,7 +95,7 @@ input,
 
 #data_subtitle_content {
   height: 180px;
-  background-color: white;
+  background-color: var(--white-color);
   border-radius: 5px;
   display: flex;
   flex-flow: row nowrap;
@@ -118,7 +127,7 @@ input,
   margin-left: 18rem;
   position: absolute;
   padding: 3rem;
-  background-color: #6c91c5;
+  background-color: var(--main-color);
   border-radius: 0 50% 50% 50%;
   transform: rotate(45deg);
 }
@@ -152,7 +161,7 @@ input,
 #fcst_day_4 {
   width: 160px;
   height: 230px;
-  border: 1px solid #1a345a;
+  border: 1px solid var(--sec-color);
   border-radius: 2rem;
   display: flex;
   flex-flow: column nowrap;
@@ -162,7 +171,7 @@ input,
 }
 
 #fcst_day_0 {
-  background-color: white;
+  background-color: var(--white-color);
 }
 
 #tmax {
@@ -201,7 +210,7 @@ input,
   flex-flow: row wrap;
   gap: 1rem;
   justify-content: space-between;
-  border: thick double #344866;
+  border: thick double var(--bor-color);
   border-radius: 1rem;
   padding: 1rem;
   margin-bottom: 1rem;
@@ -222,7 +231,7 @@ input,
   grid-template-columns: 10% 65% 20%;
   grid-template-areas: 'image hourly degree';
   text-align: left;
-  border: 1px solid #344866;
+  border: 1px solid var(--bor-color);
   border-radius: 1rem;
   width: 220px;
   height: 80px;
@@ -249,13 +258,103 @@ input,
 }
 
 
-#TMP2m, #HUMIDEX {
+#CONDITION + li, #CONDITION + li ~ li {
   grid-area: degree;
 }
 
-#HUMIDEX {
-  padding-top: 3rem;
+#CONDITION + li, #CONDITION + li ~ li {
+  margin-top: -3rem;
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: center;
+  justify-content: center;
+}
+
+#CONDITION + li ~ li { 
+  padding-top: 5rem;
+}
+
+#img_RH2m, #img_TMP2m {
+  width: 30px;
+  height: 30px;
 }
 /* Fin */
 
 /* Fin */
+
+/* Mise en forme du pied de page */
+#footer {
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  background-color: var(--sec-color);
+  color: #ffffff;
+  padding-bottom: 0.5rem;
+  font-size: small;
+}
+
+span, a {
+  color: var(--main-color);
+}
+/* Fin */
+
+
+
+/*Pour tous les appareils équipés d'écrans et dont la taille est inférieure à 780px*/
+@media screen and (max-width: 780px){
+  #menu {
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+  }
+
+  #logo {
+    font-size: large;
+  }
+  
+  #search {
+    gap: 1rem;
+  }
+  
+  input {
+    width: 160px;
+  } 
+
+  /* Mise en page du sous-titre : (lever du soleil, heure et jour, coucher du soleil */
+  #data_subtitle {
+    width: 100%;
+  }
+
+  #data_subtitle_content {
+    height: 160px;
+  }
+
+  #sunrise, #sunset, #hour {
+    font-size: 10px;
+  }
+
+  #condition {
+    font-size: 0.7rem;
+  }
+  
+   #tmp {
+    font-size: 4rem;
+  }
+  
+  
+  #water {
+    margin-left: 8rem;
+  }
+  
+  
+  #himidity {
+    margin-left: -1rem;
+  }
+  
+  /*
+  #pressure {
+    padding: 1rem;
+    margin-top: -6rem;
+    font-size: 0.8rem;
+  } */
+}
