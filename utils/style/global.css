@@ -1,21 +1,14 @@
-:root {
-  --main-color: #6c91c5;
-  --sec-color: #1a345a;
-  --white-color: #ffffff;
-  --black-color: #000000;
-  --err-color: #fa0202;
-  --bor-color: #344866;
-}
+@import url('./_settings.css');
 
 body {
   margin: 0 auto;
-  width: 80%;
-  background-color: var(--main-color);
+  max-width: 1500px;
+  /* background-color: var(--main-color); */
   color: var(--black-color);
-}
-
-* {
-  list-style-type: none;
+  font-family: var(--main-font);
+  /* background: url(/images/CIEL.jpg) no-repeat center center fixed;
+  background-size: cover; */
+  background: linear-gradient(0.25turn, var(--main-color), var(--white-color), var(--sec-color));
 }
 
 body > div {
@@ -26,11 +19,12 @@ body > div {
 }
 
 #menu {
+  font-family: var(--sec-font);
   background-color: var(--sec-color);
-  padding: 5px;
+  padding: 2px;
   padding-left: 1rem;
   padding-right: 1rem;
-  margin: 1rem auto;
+  margin: 1rem;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
@@ -49,20 +43,30 @@ body > div {
   flex-flow: row nowrap;
 }
 
-input,
-#bouton {
+input, #bouton {
   padding: 0.5rem;
   font-size: 1rem;
   border-radius: 5px;
 }
 
-#bouton {
-  background-color: var(--main-color);
+/* Mise en forme du contenu par defaut */
+#content {
+  margin: 2rem;
+  display: flex;
+  gap: 2rem;
+  flex-flow: row nowrap;
+  justify-content: space-between;
+  align-items: center;
 }
 
-/* Mise en forme de la carte */
+#welcome {
+  text-align: center;
+}
+
 #map {
-  height: 260px;
+  width: 100%;
+  height: 360px;
+  border-radius: 5px;
 }
 /* FIn */
 
@@ -70,7 +74,7 @@ input,
   display: flex;
   gap: 1rem;
   flex-flow: column nowrap;
-  margin-bottom: 5rem;
+  margin-bottom: 6rem;
 }
 
 /* Mise en forme du message d'erreur en cas d'absence de donnée */
@@ -78,6 +82,7 @@ input,
   color: var(--err-color);
   font-size: 1rem;
 }
+/* Fin */
 
 /* Mise en page du sous-titre : (lever du soleil, heure et jour, coucher du soleil */
 #data_subtitle {
@@ -124,7 +129,7 @@ input,
 
 #water {
   z-index: 0;
-  margin-left: 18rem;
+  margin-left: 13rem;
   position: absolute;
   padding: 3rem;
   background-color: var(--main-color);
@@ -159,6 +164,7 @@ input,
 #fcst_day_2,
 #fcst_day_3,
 #fcst_day_4 {
+  background-color: var(--special-color);
   width: 160px;
   height: 230px;
   border: 1px solid var(--sec-color);
@@ -213,7 +219,7 @@ input,
   border: thick double var(--bor-color);
   border-radius: 1rem;
   padding: 1rem;
-  margin-bottom: 1rem;
+  margin: 1rem;
 }
 
 #fcst_day_0_hourly_data {
@@ -284,18 +290,20 @@ input,
 
 /* Mise en forme du pied de page */
 #footer {
+  font-family: var(--sec-font);
   position: fixed;
   left: 0;
   bottom: 0;
   width: 100%;
   background-color: var(--sec-color);
-  color: #ffffff;
-  padding-bottom: 0.5rem;
-  font-size: small;
+  color: var(--white-color);
+  /* padding-bottom: 0.5rem; */
+  font-size: 1rem;
 }
 
-span, a {
+span {
   color: var(--main-color);
+  font-size: 1.5rem;
 }
 /* Fin */
 

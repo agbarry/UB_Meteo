@@ -1,0 +1,28 @@
+@import url('https://fonts.googleapis.com/css2?family=EB+Garamond&family=Rubik+Glitch&display=swap');
+
+:root {
+    --main-color: #6c91c5;
+    --sec-color: #1a345a;
+    --white-color: #ffffff;
+    --black-color: #000000;
+    --err-color: #fa0202;
+    --bor-color: #344866;
+    --special-color: #496da0;
+    --main-font: 'EB Garamond', serif;
+    --sec-font: 'Rubik Glit', cursive;
+}
+
+button {
+    cursor: pointer;
+    background-color: var(--main-color);
+}
+
+li {
+    list-style-type: none;
+}
+
+a {
+    text-decoration: none;
+    color: var(--main-color);
+    cursor: pointer;
+}

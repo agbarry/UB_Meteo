@@ -6,7 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <title>Application météo</title>
     <!-- Liaison du fichier contenant le code css -->
-    <link href="./utils/style/general.css" rel="stylesheet" />
+    <link href="./utils/style/global.css" rel="stylesheet" />
 
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.2/dist/leaflet.css"
      integrity="sha256-sA+zWATbFveLLNqWO2gtiw3HL/lh1giY/Inf1BJ0z14="
@@ -30,8 +30,15 @@
         <button type="button" id="bouton">Afficher</button>
       </div>
     </div>
+    
+    <div id="content">
+      <div id="welcome">
+        <h3>Bienvenue sur <q>UB_Météo 😇 </q></h3>
+        <h1>Découvrez la météo de votre ville pour toutes les localités de Suisse, France et Belgique.</h1>
+      </div>
 
-    <div id="map"></div>
+      <div id="map"></div>
+    </div>
 
     <div id="data">
       <!-- Affichage des données -->
@@ -40,7 +47,7 @@
     <div id="footer">
       <p>© 2022 by <span> agbarry </span> </p>
 
-      <q>Master 2 - <a href="https://www.u-bordeaux.fr/">Université de Bordeaux</a>- Prog web</q>
+      <q>Master 2 (Génie Logiciel) - <a href="https://www.u-bordeaux.fr/"> <span> Université de Bordeaux </span></a>- Prog web</q>
     </div>
   </body>
 </html>

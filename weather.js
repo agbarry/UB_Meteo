@@ -1,22 +1,13 @@
 import { headElements } from './utils/data/Data.js';
 
-/* Pour recupérer la date courante ainsi les cinq prochaines heures à partir de l'heure courante */
-function getDate() {
-  let date = new Date();
-  let current_time = date.getHours();
-
-  let current_times = [current_time + "H00"];
-  if (current_time === 23) current_time = -1;
-
-  for (let i = 1; i < 5; i++) current_times.push(current_time + i + "H00");
-
-  return current_times;
-}
-
 /* Recherche des données */
-async function search() {
-  let input = document.querySelector("input");
-  let name = (input.value).normalize("NFD").replace(/\p{Diacritic}/gu,""); /* Pour enlever les accents */
+async function search(isInput, value) {
+  let input = document.querySelector('input');
+  let name = '';
+  if(isInput === true)
+    name = (input.value).normalize("NFD").replace(/\p{Diacritic}/gu,""); /* Pour enlever les accents */
+  else
+    name = 'lat=' + value.lat + 'lng=' + value.lng;
 
   try {
     const response = await fetch(
@@ -65,13 +56,10 @@ function createStructure(elements) {
 }
 
 /* Permet d'afficher la météo par heure */
-function hourlyDisplay(element, info, parent) {
+function hourlyDisplay(current_hour, element, info, parent) {
   for (const hourly_data in element) {
-    /* Affichage des données des cinq prochaines heures à partir de l'heure courante */
-    // if(current_date[1].includes(hourly_data)) {
-
-    const ul = createElement(parent + "_" + info, "ul", parent + "_" + info + hourly_data,null);
-    ul.style.backgroundColor = ( hourly_data === ((new Date()).getHours()) + 1 +'H00' ? 'white' : 'inherit');
+    const ul = createElement(parent + "_" + info, "ul", parent + "_" + info + hourly_data, null);
+    ul.style.backgroundColor = ( hourly_data === current_hour ? 'white' : '#496da0');
 
     createElement(parent + "_" + info + hourly_data, "li", "hour" + "_data", hourly_data); /* Affichage de l'heure */
 
@@ -81,16 +69,24 @@ function hourlyDisplay(element, info, parent) {
         hourly_data_info === "TMP2m" || hourly_data_info === "RH2m") 
       {
         if (hourly_data_info !== "ICON") {
-          let li = createElement(parent + "_" + info + hourly_data, "li", hourly_data_info, element[hourly_data][hourly_data_info]);
+          let li = createElement(parent + "_" + info + hourly_data, "li", hourly_data_info, null);
+
           if(hourly_data_info === "RH2m") {
             li.id = parent+'_'+hourly_data_info+'_'+hourly_data;
             let icon = createElement(parent+'_'+hourly_data_info+'_'+hourly_data, "img", 'img_'+hourly_data_info, null);
             icon.src = 'images/humidite.png';
+
+            li.innerHTML +=  element[hourly_data][hourly_data_info] + '%';
           }
           else if(hourly_data_info === "TMP2m") {
             li.id = parent+'_'+hourly_data_info+'_'+hourly_data;
             let icon = createElement(parent+'_'+hourly_data_info+'_'+hourly_data, "img", 'img_'+hourly_data_info, null);
             icon.src = 'images/celsius.png';
+
+            li.innerHTML +=  element[hourly_data][hourly_data_info] + '&deg';
+          }
+          else {
+            li.innerHTML +=  element[hourly_data][hourly_data_info];
           }
         } else if (hourly_data_info === "ICON") {
           let img = createElement(parent + "_" + info + hourly_data,"img",hourly_data_info, null);
@@ -98,12 +94,11 @@ function hourlyDisplay(element, info, parent) {
         }
       }
     }
-    // }
   }
 }
 
-/* Permet d'afficher la météo globale de des 5jours */
-function weatherDayDisplay(infos, parent, h3) {
+/* Permet d'afficher la météo globale des 5jours */
+function weatherDayDisplay(current_hour, infos, parent, h3) {
   for (const info in infos) {
     let element = infos[info];
 
@@ -121,13 +116,12 @@ function weatherDayDisplay(infos, parent, h3) {
           img.src = element;
         }
       } else {
-        // const current_date = getDate();
-        createElement("data","h3", parent + "_" + info + "_title", "Détail par heure de la météo du : " + infos['date']);
+        createElement("data","h1", parent + "_" + info + "_title", "Détail par heure de la météo du : " + infos['date']);
 
         createElement("data", "div", parent + "_" + info, null);
 
         /* Pour l'affichage du détail par heure */
-        hourlyDisplay(element, info, parent);
+        hourlyDisplay(current_hour, element, info, parent);
       }
     }
   }
@@ -149,7 +143,7 @@ function weatherDisplay(data) {
       div.addEventListener("mouseout",
         d !== "fcst_day_0"
           ? function () {
-            this.style.backgroundColor = "#6c91c5";
+            this.style.backgroundColor = "#496da0";
           }
           : function () {
             this.style.backgroundColor = "white";
@@ -159,7 +153,8 @@ function weatherDisplay(data) {
       /* Création d'un élément h3 qui sera le titre des éléments : à enlever probablement */
       let h3 = createElement(d, "h3", "day_long", null);
 
-      weatherDayDisplay(infos, d, h3); /* Affichage des infos */
+      let current_hour = (data["current_condition"]["hour"]).replace(':', 'H');
+      weatherDayDisplay(current_hour, infos, d, h3); /* Affichage des infos */
     }
   }
 }
@@ -208,8 +203,8 @@ function dayOnClick() {
 
 
 /* Affichage des données */
-async function dataDisplay() {
-  const data = await search();
+async function dataDisplay(isInput, val) {
+  const data = await search(isInput, val);
 
   document.querySelector("#data").innerHTML = ""; /* Pour nettoyer le contenu avant l'affichage */
 
@@ -230,10 +225,16 @@ async function dataDisplay() {
 }
 
 
+/* Pour la gestion du click sur la carte */
+function onMapClick(element) {
+  dataDisplay(false, element.latlng);
+}
+
+/* Pour l'affichage de la carte */
 function mapper() {
   const infos = {
-    lat: 51.505,
-    lng: -0.09,
+    lat: 48.856614,
+    lng: 2.3522219,
     zoomLevel: 13
   }
   
@@ -242,17 +243,18 @@ function mapper() {
     maxZoom: 19,
     attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
   }).addTo(map);
+
+  map.on('click', onMapClick);
 }
 
-
 /* Gestion du click */
-function onClick() {
+function main() {
   const button = document.querySelector("#bouton");
   button.addEventListener("click", () => {
-    dataDisplay();
+    dataDisplay(true, null);
   });
 
   mapper();
 }
 
-onClick(); /* Lancement de la recherche */
+main(); /* Lancement de la recherche */
