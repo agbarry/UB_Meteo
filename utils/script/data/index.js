@@ -1,7 +1,11 @@
 export function headElements(data) { 
+  const lat = parseFloat(data["city_info"]["latitude"]).toFixed(3);
+  const lng = parseFloat(data["city_info"]["longitude"]).toFixed(3);
+  const headContent = (data["city_info"]["name"] === 'NA' ? ('Latitude : ' + lat + ' & longitude : ' + lng) :  data["city_info"]["name"]);
+  
   return [
     {'data': [
-        {'h2': ["", data["city_info"]["country"]]},
+        {'h2': ["", headContent]},
         {'h3': ["title2", "Météo " +(data["city_info"]["name"] + " : " + data["current_condition"]["date"])]},
         {'div': ["data_subtitle", null]}, /* Pour l'affichage d'un sous-titre: lever du soleil, heure et jour, coucher du soleil */
         {"div": ["data_content", null]}

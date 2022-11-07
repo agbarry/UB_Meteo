@@ -8,10 +8,11 @@ async function search(isInput, value) {
     name = (input.value).normalize("NFD").replace(/\p{Diacritic}/gu,""); /* To remove accents */
   else
     name = 'lat=' + value.lat + 'lng=' + value.lng;
-
+  
+  const url = "https://prevision-meteo.ch/services/json/" + name;
   try {
     const response = await fetch(
-      "https://prevision-meteo.ch/services/json/" + name
+      url, {mode: 'cors'}
     );
 
     if (!response.ok) {
