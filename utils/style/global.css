@@ -3,12 +3,9 @@
 body {
   margin: 0 auto;
   max-width: 1500px;
-  /* background-color: var(--main-color); */
   color: var(--black-color);
   font-family: var(--main-font);
-  /* background: url(/images/CIEL.jpg) no-repeat center center fixed;
-  background-size: cover; */
-  background: linear-gradient(0.25turn, var(--main-color), var(--white-color), var(--sec-color));
+  background: linear-gradient(0.25turn, var(--main-color), var(--white-color), var(--special-color));
 }
 
 body > div {
@@ -25,6 +22,7 @@ body > div {
   padding-left: 1rem;
   padding-right: 1rem;
   margin: 1rem;
+  margin-top: 0.5rem;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
@@ -39,14 +37,30 @@ body > div {
 
 #search {
   display: flex;
-  gap: 2rem;
   flex-flow: row nowrap;
+  align-items: center;
+  justify-content: flex-start;
 }
 
 input, #bouton {
   padding: 0.5rem;
-  font-size: 1rem;
   border-radius: 5px;
+  float: left;
+  font-size: 17px
+}
+
+input {
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+#bouton {
+  border-bottom-left-radius: 0;
+  border-top-left-radius: 0;
+}
+
+input:focus {
+  height: 14px;
 }
 
 /* Mise en forme du contenu par defaut */
@@ -86,7 +100,7 @@ input, #bouton {
 
 /* Mise en page du sous-titre : (lever du soleil, heure et jour, coucher du soleil */
 #data_subtitle {
-  width: 720px;
+  width: 60%;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -99,21 +113,27 @@ input, #bouton {
 }
 
 #data_subtitle_content {
-  height: 180px;
+  height: max-content;
   background-color: var(--white-color);
   border-radius: 5px;
-  display: flex;
-  flex-flow: row nowrap;
-  justify-content: space-between;
+  display: grid;
+  grid-template-columns: 30% 70%;
+  grid-template-areas: 'content1 content2';
+  align-items: center;
   text-align: center;
 }
 
+#data_subtitle_content1 {
+  grid-area: content1;
+}
+
 #data_subtitle_content2 {
-  display: flex;
-  gap: 2rem;
-  flex-flow: row nowrap;
-  justify-content: space-between;
+  grid-area: content2;
+  display: grid;
+  grid-template-columns: 40% 30% 30%;
+  grid-template-areas: 'first second third';
   align-items: center;
+  text-align: center;
 }
 
 #condition {
@@ -123,14 +143,19 @@ input, #bouton {
 }
 
 #tmp {
+  grid-area: first;
   margin: 0;
   font-size: 8rem;
 }
 
+#water, #himidity {
+  grid-area: second;
+  position: absolute;
+  margin-left: 15rem;
+}
+
 #water {
   z-index: 0;
-  margin-left: 13rem;
-  position: absolute;
   padding: 3rem;
   background-color: var(--main-color);
   border-radius: 0 50% 50% 50%;
@@ -138,12 +163,12 @@ input, #bouton {
 }
 
 #himidity {
-  margin-left: 1.5rem;
-  margin-top: 1rem;
+  padding: 1rem;
   z-index: 10;
 }
 
 #pressure {
+  grid-area: third;
   padding: 1rem;
   margin-top: -6rem;
   font-size: 0.8rem;
@@ -153,7 +178,6 @@ input, #bouton {
 /* Mise en page de l'affichage des données selon le jour */
 #data_content {
   display: flex;
-  gap: 1rem;
   flex-flow: row nowrap;
   justify-content: space-between;
   align-items: center;
@@ -164,7 +188,7 @@ input, #bouton {
 #fcst_day_2,
 #fcst_day_3,
 #fcst_day_4 {
-  background-color: var(--special-color);
+  background-color: var(--main-color);
   width: 160px;
   height: 230px;
   border: 1px solid var(--sec-color);
@@ -212,20 +236,19 @@ input, #bouton {
 #fcst_day_0_hourly_data, #fcst_day_1_hourly_data,
 #fcst_day_2_hourly_data, #fcst_day_3_hourly_data, 
 #fcst_day_4_hourly_data {
-  display: none;
-  flex-flow: row wrap;
-  gap: 1rem;
-  justify-content: space-between;
-  border: thick double var(--bor-color);
-  border-radius: 1rem;
   padding: 1rem;
   margin: 1rem;
+  display: none;
+  flex-flow: row wrap;
+  column-gap: 1rem;
+  justify-content: center;
+  align-items: center;
+  border: thick double var(--bor-color);
+  border-radius: 1rem;
 }
 
 #fcst_day_0_hourly_data {
   display: flex;
-  flex-flow: row wrap;
-  gap: 1rem;
 }
 
 #fcst_day_0_hourly_data > ul,
@@ -285,8 +308,28 @@ input, #bouton {
   height: 30px;
 }
 /* Fin */
-
 /* Fin */
+
+/* Mise en forme du bouton remonter */
+#top {
+  display: none; 
+  position: fixed; 
+  bottom: 20px; 
+  right: 30px; 
+  z-index: 99; 
+  border: none; 
+  outline: none; 
+  background-color: var(--main-color); 
+  color: var(--black-color);
+  cursor: pointer; 
+  padding: 15px; 
+  border-radius: 10px; 
+  font-size: 18px; 
+}
+
+#top:hover {
+  background-color: var(--special-color); /* Add a dark-grey background on hover */
+}
 
 /* Mise en forme du pied de page */
 #footer {
@@ -297,7 +340,6 @@ input, #bouton {
   width: 100%;
   background-color: var(--sec-color);
   color: var(--white-color);
-  /* padding-bottom: 0.5rem; */
   font-size: 1rem;
 }
 
@@ -308,9 +350,8 @@ span {
 /* Fin */
 
 
-
 /*Pour tous les appareils équipés d'écrans et dont la taille est inférieure à 780px*/
-@media screen and (max-width: 780px){
+@media screen and (max-width: 960px){
   #menu {
     padding-left: 0.5rem;
     padding-right: 0.5rem;
@@ -320,23 +361,17 @@ span {
     font-size: large;
   }
   
-  #search {
-    gap: 1rem;
-  }
-  
   input {
     width: 160px;
   } 
 
+  /* Mise en forme du contenu par defaut */
+  #content {
+    gap: 0;
+    flex-flow: column nowrap;
+  }
+
   /* Mise en page du sous-titre : (lever du soleil, heure et jour, coucher du soleil */
-  #data_subtitle {
-    width: 100%;
-  }
-
-  #data_subtitle_content {
-    height: 160px;
-  }
-
   #sunrise, #sunset, #hour {
     font-size: 10px;
   }
@@ -350,19 +385,43 @@ span {
   }
   
   
-  #water {
-    margin-left: 8rem;
+  #water, #himidity {
+    margin-left: 8.5rem;
+  }
+
+  #data_subtitle {
+    width: 70%;
+    justify-content: space-between;
   }
   
-  
-  #himidity {
-    margin-left: -1rem;
+  /* Mise en page de l'affichage des données selon le jour */
+  #fcst_day_0,
+  #fcst_day_1,
+  #fcst_day_2,
+  #fcst_day_3,
+  #fcst_day_4 {
+    width: 130px;
   }
   
-  /*
-  #pressure {
-    padding: 1rem;
-    margin-top: -6rem;
-    font-size: 0.8rem;
-  } */
+}
+
+/*Pour tous les appareils équipés d'écrans et dont la taille est inférieure à 780px*/
+@media screen and (max-width: 660px){
+
+  #water, #himidity {
+    margin-left: 6rem;
+  }
+  
+  /* Mise en page de l'affichage des données selon le jour */
+  #data_content {
+    flex-direction: column;
+  }
+
+  #fcst_day_0,
+  #fcst_day_1,
+  #fcst_day_2,
+  #fcst_day_3,
+  #fcst_day_4 {
+    width: 130px;
+  }  
 }

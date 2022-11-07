@@ -1,11 +1,11 @@
-import { headElements } from './utils/data/Data.js';
+import { headElements } from '../data/index.js';
 
-/* Recherche des données */
+/* Data search function depending on whether the request comes from an input or a click on the map */
 async function search(isInput, value) {
   let input = document.querySelector('input');
   let name = '';
   if(isInput === true)
-    name = (input.value).normalize("NFD").replace(/\p{Diacritic}/gu,""); /* Pour enlever les accents */
+    name = (input.value).normalize("NFD").replace(/\p{Diacritic}/gu,""); /* To remove accents */
   else
     name = 'lat=' + value.lat + 'lng=' + value.lng;
 
@@ -25,7 +25,7 @@ async function search(isInput, value) {
   }
 }
 
-/* Fonction permettant de créer une balise html */
+/* Function to create a tag in the DOM */
 function createElement(parent, element, id, content) {
   let e = document.createElement(element);
   e.id = id;
@@ -35,35 +35,31 @@ function createElement(parent, element, id, content) {
   return e;
 }
 
-/* Fonction permettant de créer une structure arborescente  */
+/* Function to create the tree structure for data display  */
 function createStructure(elements) {
-  /* Parcours du tableau de base contenant le nombre de structure d'arborescence à créer */
-  for(const element in elements) {
+  for(const element in elements) { /* Browse the basic table containing the number of trees to create */
     const values = elements[element];
-    /* Parcours de chaque structure d'arborescence */
-    for (const parent in values) {
-      /* Parcours de tous elements de l'arborescence */
-      for (const e in values[parent]) {
-        /* Parcours de chaque element de l'arborescence */
-        for (const el in (values[parent])[e]) {
+    for (const parent in values) { /* For each struct */
+      for (const e in values[parent]) { /* Browse all elements of the tree structure */
+        for (const el in (values[parent])[e]) { /* For each element of the tree structure */
           const id = (values[parent][e])[el][0];
           const content = (values[parent][e])[el][1];
-          createElement(parent, el, id, content);   
-        };
+          createElement(parent, el, id, content);   /* Create a tag */
+        }
       }
     }
   }
 }
 
-/* Permet d'afficher la météo par heure */
+/* Weather display function by hour */
 function hourlyDisplay(current_hour, element, info, parent) {
   for (const hourly_data in element) {
     const ul = createElement(parent + "_" + info, "ul", parent + "_" + info + hourly_data, null);
-    ul.style.backgroundColor = ( hourly_data === current_hour ? 'white' : '#496da0');
+    ul.style.backgroundColor = ( hourly_data === current_hour ? 'white' : '#6c91c5');
 
-    createElement(parent + "_" + info + hourly_data, "li", "hour" + "_data", hourly_data); /* Affichage de l'heure */
+    createElement(parent + "_" + info + hourly_data, "li", "hour" + "_data", hourly_data); /* Display hour */
 
-    /* Affichage des autres infos */
+    /* Display of other information */
     for (const hourly_data_info in element[hourly_data]) {
       if (hourly_data_info === "ICON" || hourly_data_info === "CONDITION" ||
         hourly_data_info === "TMP2m" || hourly_data_info === "RH2m") 
@@ -74,14 +70,14 @@ function hourlyDisplay(current_hour, element, info, parent) {
           if(hourly_data_info === "RH2m") {
             li.id = parent+'_'+hourly_data_info+'_'+hourly_data;
             let icon = createElement(parent+'_'+hourly_data_info+'_'+hourly_data, "img", 'img_'+hourly_data_info, null);
-            icon.src = 'images/humidite.png';
+            icon.src = './utils/images/humidite.png';
 
             li.innerHTML +=  element[hourly_data][hourly_data_info] + '%';
           }
           else if(hourly_data_info === "TMP2m") {
             li.id = parent+'_'+hourly_data_info+'_'+hourly_data;
             let icon = createElement(parent+'_'+hourly_data_info+'_'+hourly_data, "img", 'img_'+hourly_data_info, null);
-            icon.src = 'images/celsius.png';
+            icon.src = "./utils/images/celsius.png";
 
             li.innerHTML +=  element[hourly_data][hourly_data_info] + '&deg';
           }
@@ -95,9 +91,10 @@ function hourlyDisplay(current_hour, element, info, parent) {
       }
     }
   }
+  document.getElementById('data').scrollIntoView();
 }
 
-/* Permet d'afficher la météo globale des 5jours */
+/* Function for displaying the weather by day */
 function weatherDayDisplay(current_hour, infos, parent, h3) {
   for (const info in infos) {
     let element = infos[info];
@@ -120,8 +117,7 @@ function weatherDayDisplay(current_hour, infos, parent, h3) {
 
         createElement("data", "div", parent + "_" + info, null);
 
-        /* Pour l'affichage du détail par heure */
-        hourlyDisplay(current_hour, element, info, parent);
+        hourlyDisplay(current_hour, element, info, parent); /* Display weather by hour */
       }
     }
   }
@@ -131,9 +127,8 @@ function weatherDayDisplay(current_hour, infos, parent, h3) {
 function weatherDisplay(data) {
   for (const d in data) {
     if ( d !== "city_info" && d !== "forecast_info" && d !== "current_condition" ) {
-      let infos = data[d]; /* Recupération de toutes les infos de la météo */
+      let infos = data[d]; /* Recovery of all weather information */
 
-      /* Création d'un élément div qui contiendra un titre ainsi qu'une liste des éléments */
       let div = createElement("data_content", "div", d, null);
 
       div.addEventListener("mouseover", function () {
@@ -143,24 +138,24 @@ function weatherDisplay(data) {
       div.addEventListener("mouseout",
         d !== "fcst_day_0"
           ? function () {
-            this.style.backgroundColor = "#496da0";
+            this.style.backgroundColor = "#6c91c5";
           }
           : function () {
             this.style.backgroundColor = "white";
           }
       );
 
-      /* Création d'un élément h3 qui sera le titre des éléments : à enlever probablement */
       let h3 = createElement(d, "h3", "day_long", null);
 
       let current_hour = (data["current_condition"]["hour"]).replace(':', 'H');
-      weatherDayDisplay(current_hour, infos, d, h3); /* Affichage des infos */
+      current_hour = (current_hour.charAt(0) === '0' ? current_hour.substr(1) : current_hour);
+      weatherDayDisplay(current_hour, infos, d, h3); /* Displaying the 'd' day news */
     }
   }
 }
 
 
-/* Pour l'activation du click sur les jours de météo ainsi le changement de couleur de fond selon actif ou non */
+/* For the activation of the click on the days and the change of the background color according to the active day or not */
 function dayOnClick() {
   for (let i = 0; i < 5; i++) {
     const element = "#fcst_day_" + i;
@@ -184,6 +179,7 @@ function dayOnClick() {
             h3.style.display = "flex";
             const div2 = document.querySelector(e + '_hourly_data');
             div2.style.display = "flex";
+            document.querySelector(e + '_hourly_data').scrollIntoView();
           };
 
           div1.addEventListener("mouseout",
@@ -203,39 +199,43 @@ function dayOnClick() {
 
 
 /* Affichage des données */
-async function dataDisplay(isInput, val) {
+export async function dataDisplay(isInput, val) {
   const data = await search(isInput, val);
 
-  document.querySelector("#data").innerHTML = ""; /* Pour nettoyer le contenu avant l'affichage */
+  document.querySelector("#data").innerHTML = ""; /* Cleaning the content before displaying */
 
   if (!data || data["errors"]) {
     createElement("data","h2","error","Erreur, aucune donnée pour la ville spécifiée !");
     return;
   }
   
-  /* Création de l'entête pour l'affichage du pays, de la ville etc...  */
-  createStructure(headElements(data));
-  document.querySelector('#icon_big').src = data["current_condition"]["icon_big"]; 
-
-  /* Affichage de la météo de chaque jour */
-  weatherDisplay(data);
+  if (data["current_condition"]["tmp"]) {
+    /* Creation of the header to display the country, the city etc...  */
+    createStructure(headElements(data));
+    document.querySelector('#icon_big').src = data["current_condition"]["icon_big"]; 
   
-  /* Sert à faire la mise à jour de l'affichage de la météo en heure selon le jour selectionné */
-  dayOnClick(); 
+    weatherDisplay(data); /* Weather display */
+  
+    dayOnClick(); /* To update the weather display in time according to the selected day */
+  }
+  else {
+    createElement("data","h2","error","Desolé, données manquantes pour cette ville  !");
+    return;
+  }
 }
 
 
-/* Pour la gestion du click sur la carte */
+/* For the management of click on map */
 function onMapClick(element) {
   dataDisplay(false, element.latlng);
 }
 
-/* Pour l'affichage de la carte */
-function mapper() {
+/* For the map display */
+export function mapper() {
   const infos = {
-    lat: 48.856614,
-    lng: 2.3522219,
-    zoomLevel: 13
+    lat: 44.8378,
+    lng: -0.594,
+    zoomLevel: 12
   }
   
   const map = L.map('map').setView([infos.lat, infos.lng], infos.zoomLevel);
@@ -247,14 +247,7 @@ function mapper() {
   map.on('click', onMapClick);
 }
 
-/* Gestion du click */
-function main() {
-  const button = document.querySelector("#bouton");
-  button.addEventListener("click", () => {
-    dataDisplay(true, null);
-  });
-
-  mapper();
+export function topFunction() {
+  document.body.scrollTop = 0; // For Safari
+  document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
 }
-
-main(); /* Lancement de la recherche */
